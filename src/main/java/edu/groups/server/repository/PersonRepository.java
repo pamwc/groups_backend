@@ -1,7 +1,8 @@
 package edu.groups.server.repository;
 
+import edu.groups.server.dto.UserDto;
+import edu.groups.server.repository.mapper.UserDtoMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.ldap.core.AttributesMapper;
 import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -17,10 +18,9 @@ import static org.springframework.ldap.query.LdapQueryBuilder.query;
 public class PersonRepository {
     private final LdapTemplate ldapTemplate;
 
-    public List<String> allUsers() {
+    public List<UserDto> allUsers() {
         return ldapTemplate.search(
                 query().where("objectClass").
-                        is("person"), (AttributesMapper<String>) attributes -> (String) attributes.get("cn").get()
-        );
+                        is("person"), new UserDtoMapper());
     }
 }
