@@ -15,9 +15,8 @@ public class UserDtoMapper implements AttributesMapper<UserDto> {
     public UserDto mapFromAttributes(Attributes attributes) throws NamingException {
         return UserDto.builder()
                 .firstName((String) attributes.get("cn").get())
-                .username(UserContext.getUsername())
+                .username((String) attributes.get("uid").get())
                 .surname((String) attributes.get("sn").get())
-                .authorities(UserContext.getAuthorities())
                 .build();
     }
 }
