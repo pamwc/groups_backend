@@ -7,6 +7,7 @@ import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.springframework.ldap.query.LdapQueryBuilder.query;
 
@@ -15,12 +16,21 @@ import static org.springframework.ldap.query.LdapQueryBuilder.query;
  */
 @Repository
 @RequiredArgsConstructor
-public class PersonRepository {
+public class UserRepositoryImpl implements UserRepository {
     private final LdapTemplate ldapTemplate;
 
     public List<UserDto> allUsers() {
         return ldapTemplate.search(
                 query().where("objectClass").
                         is("person"), new UserDtoMapper());
+    }
+
+    public Optional<UserDto> userByUsername(String username) {
+        return ldapTemplate.search(
+                query().where("objectClass")
+                        .is("person").and("uid").is(username),
+                new UserDtoMapper())
+                .stream()
+                .findFirst();
     }
 }

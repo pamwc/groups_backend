@@ -1,4 +1,4 @@
-package edu.groups.server.configuration;
+package edu.groups.server.configuration.security;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
