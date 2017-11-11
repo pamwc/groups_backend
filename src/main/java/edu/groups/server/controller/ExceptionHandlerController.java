@@ -1,6 +1,6 @@
 package edu.groups.server.controller;
 
-import edu.groups.server.controller.exception.ResourceNotFoundException;
+import edu.groups.server.exception.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;

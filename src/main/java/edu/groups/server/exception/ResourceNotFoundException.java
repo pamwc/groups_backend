@@ -1,4 +1,4 @@
-package edu.groups.server.controller.exception;
+package edu.groups.server.exception;
 
 /**
  * Created by Dawid on 05.11.2017 at 13:41.
