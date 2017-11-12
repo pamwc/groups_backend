@@ -1,7 +1,6 @@
 package edu.groups.server.repository.mapper;
 
 import edu.groups.server.dto.UserDto;
-import edu.groups.server.utils.usercontext.UserContext;
 import org.springframework.ldap.core.AttributesMapper;
 
 import javax.naming.NamingException;

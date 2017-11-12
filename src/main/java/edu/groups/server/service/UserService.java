@@ -3,12 +3,13 @@ package edu.groups.server.service;
 import edu.groups.server.dto.AuthUser;
 import edu.groups.server.dto.UserDto;
 import edu.groups.server.repository.UserRepository;
-import edu.groups.server.utils.usercontext.UserContext;
+import edu.groups.server.utils.UserContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * Created by Dawid on 05.11.2017 at 12:54.
@@ -29,5 +30,9 @@ public class UserService {
     public Optional<AuthUser> getCurrentUser() {
         Optional<UserDto> user = repository.userByUsername(UserContext.getUsername());
         return user.map(u -> new AuthUser(u, UserContext.getAuthorities()));
+    }
+
+    public Set<UserDto> getByUserNames(Set<String> userNames) {
+        return repository.userByUsernames(userNames);
     }
 }

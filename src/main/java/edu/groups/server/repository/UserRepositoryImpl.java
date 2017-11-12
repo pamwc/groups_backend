@@ -8,6 +8,8 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.springframework.ldap.query.LdapQueryBuilder.query;
 
@@ -19,12 +21,14 @@ import static org.springframework.ldap.query.LdapQueryBuilder.query;
 public class UserRepositoryImpl implements UserRepository {
     private final LdapTemplate ldapTemplate;
 
+    @Override
     public List<UserDto> allUsers() {
         return ldapTemplate.search(
                 query().where("objectClass").
                         is("person"), new UserDtoMapper());
     }
 
+    @Override
     public Optional<UserDto> userByUsername(String username) {
         return ldapTemplate.search(
                 query().where("objectClass")
@@ -32,5 +36,14 @@ public class UserRepositoryImpl implements UserRepository {
                 new UserDtoMapper())
                 .stream()
                 .findFirst();
+    }
+
+    @Override
+    public Set<UserDto> userByUsernames(Set<String> username) {
+        return username.stream()
+                .map(this::userByUsername)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toSet());
     }
 }

@@ -1,5 +1,6 @@
 package edu.groups.server.controller;
 
+import edu.groups.server.exception.InvalidJoinCodeException;
 import edu.groups.server.exception.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  */
 @ControllerAdvice
 public class ExceptionHandlerController {
-    @ExceptionHandler(ResourceNotFoundException.class)
+    @ExceptionHandler({ResourceNotFoundException.class, InvalidJoinCodeException.class})
     @ResponseStatus(value = HttpStatus.NOT_FOUND)
     @ResponseBody
     public String requestHandlingNoHandlerFound(Exception exception) {

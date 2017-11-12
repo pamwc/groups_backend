@@ -1,4 +1,4 @@
-package edu.groups.server.utils.usercontext;
+package edu.groups.server.utils;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
