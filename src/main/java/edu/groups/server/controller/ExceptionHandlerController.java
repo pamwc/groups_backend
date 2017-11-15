@@ -1,6 +1,7 @@
 package edu.groups.server.controller;
 
 import edu.groups.server.exception.InvalidJoinCodeException;
+import edu.groups.server.exception.PermissionDeniedException;
 import edu.groups.server.exception.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -17,6 +18,13 @@ public class ExceptionHandlerController {
     @ResponseStatus(value = HttpStatus.NOT_FOUND)
     @ResponseBody
     public String requestHandlingNoHandlerFound(Exception exception) {
+        return exception.getMessage();
+    }
+
+    @ExceptionHandler({PermissionDeniedException.class})
+    @ResponseStatus(value = HttpStatus.FORBIDDEN)
+    @ResponseBody
+    public String requestHandlingPermissionDenied(Exception exception) {
         return exception.getMessage();
     }
 }

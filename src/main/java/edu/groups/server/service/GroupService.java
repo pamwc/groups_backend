@@ -5,6 +5,7 @@ import edu.groups.server.dto.CreatedGroupDto;
 import edu.groups.server.dto.SimpleGroupDto;
 import edu.groups.server.entity.GroupEntity;
 import edu.groups.server.exception.InvalidJoinCodeException;
+import edu.groups.server.exception.PermissionDeniedException;
 import edu.groups.server.repository.GroupRepository;
 import edu.groups.server.utils.GroupCodeGenerator;
 import edu.groups.server.utils.UserContext;
@@ -64,6 +65,7 @@ public class GroupService {
 
     public String resetJoinCode(Long groupId) {
         GroupEntity groupEntity = getGroupOrThrow(groupId);
+        throwExceptionIfUserIsNotGroupAdmin(groupEntity);
         return newJoinCode(groupEntity);
     }
 
@@ -74,11 +76,23 @@ public class GroupService {
     }
 
     public void removeCurrentUserFromGroup(Long groupId) {
-        removeUserFromGroup(groupId, Collections.singleton(UserContext.getUsername()));
+        removeUserFromGroup(Collections.singleton(UserContext.getUsername()),
+                groupRepository.findByIdAndVisibleIsTrue(groupId));
     }
 
     public void removeUserFromGroup(Long groupId, Set<String> userName) {
         GroupEntity groupEntity = getGroupOrThrow(groupId);
+        throwExceptionIfUserIsNotGroupAdmin(groupEntity);
+        removeUserFromGroup(userName, groupEntity);
+    }
+
+    private void throwExceptionIfUserIsNotGroupAdmin(GroupEntity groupEntity) {
+        if (!groupEntity.getAdminsUserNames().contains(UserContext.getUsername())) {
+            throw new PermissionDeniedException("User is not group admin");
+        }
+    }
+
+    private void removeUserFromGroup(Set<String> userName, GroupEntity groupEntity) {
         userName.forEach(user -> {
             groupEntity.getMembersUserNames().remove(user);
             groupEntity.getAdminsUserNames().remove(user);
@@ -91,11 +105,26 @@ public class GroupService {
     }
 
     public GroupEntity getGroup(Long groupId) {
-        return groupRepository.findByIdAndVisibleIsTrue(groupId);
+        GroupEntity groupEntity = groupRepository.findByIdAndVisibleIsTrue(groupId);
+        throwExceptionIfUserIsNotMemberOfGroup(groupEntity);
+        return groupEntity;
+    }
+
+    private void throwExceptionIfUserIsNotMemberOfGroup(GroupEntity groupEntity) {
+        String currentUserLogin = UserContext.getUsername();
+        if (!isUserMemberOfGroup(groupEntity, currentUserLogin)) {
+            throw new PermissionDeniedException("User is not member of group");
+        }
+    }
+
+    private boolean isUserMemberOfGroup(GroupEntity groupEntity, String currentUserLogin) {
+        return groupEntity.getAdminsUserNames().contains(currentUserLogin) ||
+                groupEntity.getMembersUserNames().contains(currentUserLogin);
     }
 
     public void removeGroup(Long groupId) {
         GroupEntity groupEntity = getGroupOrThrow(groupId);
+        throwExceptionIfUserIsNotGroupAdmin(groupEntity);
         groupEntity.setVisible(false);
         groupRepository.save(groupEntity);
     }
