@@ -128,4 +128,11 @@ public class GroupService {
         groupEntity.setVisible(false);
         groupRepository.save(groupEntity);
     }
+
+    public void modifyGroupName(Long groupId, String groupName) {
+        GroupEntity groupEntity = getGroupOrThrow(groupId);
+        throwExceptionIfUserIsNotGroupAdmin(groupEntity);
+        groupEntity.setName(groupName);
+        groupRepository.save(groupEntity);
+    }
 }

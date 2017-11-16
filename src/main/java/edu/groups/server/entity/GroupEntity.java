@@ -1,5 +1,6 @@
 package edu.groups.server.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -23,6 +24,7 @@ import java.util.Set;
 @NoArgsConstructor
 public class GroupEntity extends BaseEntity {
     @Version
+    @JsonIgnore
     private int version;
 
     private String name;

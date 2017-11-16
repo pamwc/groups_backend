@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -65,7 +66,13 @@ public class GroupController {
     }
 
     @DeleteMapping("/{groupId}")
+    @PreAuthorize("hasRole(T(edu.groups.server.configuration.security.UserRole).ADMIN.name)")
     public void deleteGroup(@PathVariable Long groupId) {
         groupService.removeGroup(groupId);
+    }
+
+    @PutMapping("/{groupId}")
+    public void editGroupName(@PathVariable Long groupId, @RequestBody String groupName) {
+        groupService.modifyGroupName(groupId, groupName);
     }
 }
