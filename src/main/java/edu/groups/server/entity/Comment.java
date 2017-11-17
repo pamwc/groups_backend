@@ -14,5 +14,5 @@ import javax.persistence.OneToOne;
 @Data
 public class Comment extends Message {
     @OneToOne
-    private Comment parent;
+    private Comment child;
 }

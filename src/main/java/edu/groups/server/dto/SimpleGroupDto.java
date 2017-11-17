@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Set;
 
 /**
@@ -18,7 +18,7 @@ public class SimpleGroupDto {
     private Long id;
     private Set<String> adminsUserNames;
     private String name;
-    private LocalDateTime creationTime;
+    private Date creationTime;
 
     public static SimpleGroupDto valueOf(GroupEntity groupEntity) {
         return new SimpleGroupDto(groupEntity.getId(), groupEntity.getAdminsUserNames(), groupEntity.getName(),

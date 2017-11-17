@@ -1,6 +1,7 @@
 package edu.groups.server.controller;
 
 import edu.groups.server.dto.CreatedGroupDto;
+import edu.groups.server.dto.GroupDto;
 import edu.groups.server.dto.SimpleGroupDto;
 import edu.groups.server.entity.GroupEntity;
 import edu.groups.server.service.GroupService;
@@ -61,7 +62,7 @@ public class GroupController {
     }
 
     @GetMapping("/{groupId}")
-    public GroupEntity getGroup(@PathVariable Long groupId) {
+    public GroupDto getGroup(@PathVariable Long groupId) {
         return groupService.getGroup(groupId);
     }
 
@@ -74,5 +75,11 @@ public class GroupController {
     @PutMapping("/{groupId}")
     public void editGroupName(@PathVariable Long groupId, @RequestBody String groupName) {
         groupService.modifyGroupName(groupId, groupName);
+    }
+
+    @GetMapping("/{groupId}/joinCode")
+    @PreAuthorize("hasRole(T(edu.groups.server.configuration.security.UserRole).ADMIN.name)")
+    public String getJoinCode(@PathVariable Long groupId) {
+        return groupService.getJoinCode(groupId);
     }
 }

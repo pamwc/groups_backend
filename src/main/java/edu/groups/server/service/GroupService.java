@@ -1,18 +1,16 @@
 package edu.groups.server.service;
 
+import edu.groups.server.annotation.AppService;
 import edu.groups.server.configuration.security.UserRole;
 import edu.groups.server.dto.CreatedGroupDto;
+import edu.groups.server.dto.GroupDto;
 import edu.groups.server.dto.SimpleGroupDto;
 import edu.groups.server.entity.GroupEntity;
 import edu.groups.server.exception.InvalidJoinCodeException;
-import edu.groups.server.exception.PermissionDeniedException;
-import edu.groups.server.repository.GroupRepository;
 import edu.groups.server.utils.GroupCodeGenerator;
 import edu.groups.server.utils.UserContext;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -23,11 +21,9 @@ import static java.util.Optional.ofNullable;
 /**
  * Created by Dawid on 11.11.2017 at 19:57.
  */
-@Service
 @RequiredArgsConstructor
-@Transactional
-public class GroupService {
-    private final GroupRepository groupRepository;
+@AppService
+public class GroupService extends BaseService {
 
     public List<SimpleGroupDto> getCurrentUserGroups() {
         return ofNullable(groupRepository.findAllByMembersUserNamesOrAdminsUserNamesAndVisibleTrue(UserContext
@@ -86,12 +82,6 @@ public class GroupService {
         removeUserFromGroup(userName, groupEntity);
     }
 
-    private void throwExceptionIfUserIsNotGroupAdmin(GroupEntity groupEntity) {
-        if (!groupEntity.getAdminsUserNames().contains(UserContext.getUsername())) {
-            throw new PermissionDeniedException("User is not group admin");
-        }
-    }
-
     private void removeUserFromGroup(Set<String> userName, GroupEntity groupEntity) {
         userName.forEach(user -> {
             groupEntity.getMembersUserNames().remove(user);
@@ -100,26 +90,10 @@ public class GroupService {
         groupRepository.save(groupEntity);
     }
 
-    private GroupEntity getGroupOrThrow(Long groupId) {
-        return groupRepository.findByIdAndVisibleIsTrue(groupId);
-    }
-
-    public GroupEntity getGroup(Long groupId) {
-        GroupEntity groupEntity = groupRepository.findByIdAndVisibleIsTrue(groupId);
+    public GroupDto getGroup(Long groupId) {
+        GroupEntity groupEntity = getGroupOrThrow(groupId);
         throwExceptionIfUserIsNotMemberOfGroup(groupEntity);
-        return groupEntity;
-    }
-
-    private void throwExceptionIfUserIsNotMemberOfGroup(GroupEntity groupEntity) {
-        String currentUserLogin = UserContext.getUsername();
-        if (!isUserMemberOfGroup(groupEntity, currentUserLogin)) {
-            throw new PermissionDeniedException("User is not member of group");
-        }
-    }
-
-    private boolean isUserMemberOfGroup(GroupEntity groupEntity, String currentUserLogin) {
-        return groupEntity.getAdminsUserNames().contains(currentUserLogin) ||
-                groupEntity.getMembersUserNames().contains(currentUserLogin);
+        return GroupDto.valueOf(groupEntity);
     }
 
     public void removeGroup(Long groupId) {
@@ -134,5 +108,11 @@ public class GroupService {
         throwExceptionIfUserIsNotGroupAdmin(groupEntity);
         groupEntity.setName(groupName);
         groupRepository.save(groupEntity);
+    }
+
+    public String getJoinCode(Long groupId) {
+        GroupEntity groupEntity = getGroupOrThrow(groupId);
+        throwExceptionIfUserIsNotGroupAdmin(groupEntity);
+        return groupEntity.getJoinCode();
     }
 }

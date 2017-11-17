@@ -19,6 +19,6 @@ public interface GroupRepository extends CrudRepository<GroupEntity, Long> {
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     GroupEntity findByJoinCodeAndVisibleIsTrue(String joinCode);
 
-    @Lock(LockModeType.WRITE)
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
     GroupEntity findByIdAndVisibleIsTrue(Long id);
 }
