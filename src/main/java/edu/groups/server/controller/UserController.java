@@ -5,6 +5,7 @@ import edu.groups.server.dto.UserDto;
 import edu.groups.server.exception.ResourceNotFoundException;
 import edu.groups.server.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,5 +37,10 @@ public class UserController {
         }
 
         throw new ResourceNotFoundException("User does not exist");
+    }
+
+    @GetMapping(value = "/{username}/photo", produces = MediaType.IMAGE_JPEG_VALUE)
+    public byte[] getUserPhoto(@PathVariable String username) {
+        return service.getUserPhoto(username).orElseGet(null);
     }
 }

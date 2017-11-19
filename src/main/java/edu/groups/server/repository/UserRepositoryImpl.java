@@ -3,6 +3,7 @@ package edu.groups.server.repository;
 import edu.groups.server.dto.UserDto;
 import edu.groups.server.repository.mapper.UserDtoMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.ldap.core.AttributesMapper;
 import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -46,4 +47,15 @@ public class UserRepositoryImpl implements UserRepository {
                 .map(Optional::get)
                 .collect(Collectors.toSet());
     }
+
+    @Override
+    public Optional<byte[]> getUserPhoto(String username) {
+        return ldapTemplate.search(
+                query().where("objectClass")
+                        .is("person")
+                        .and("uid").is(username), (AttributesMapper<byte[]>) attributes ->
+                        (byte[]) attributes.get("jpegPhoto").get()).stream().findFirst();
+    }
+
+
 }

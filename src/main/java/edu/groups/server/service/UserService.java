@@ -35,4 +35,8 @@ public class UserService {
     public Set<UserDto> getByUserNames(Set<String> userNames) {
         return repository.userByUsernames(userNames);
     }
+
+    public Optional<byte[]> getUserPhoto(String username) {
+        return repository.getUserPhoto(username);
+    }
 }

@@ -13,4 +13,5 @@ public interface UserRepository {
     List<UserDto> allUsers();
     Optional<UserDto> userByUsername(String username);
     Set<UserDto> userByUsernames(Set<String> username);
+    Optional<byte[]> getUserPhoto(String username);
 }
