@@ -25,13 +25,13 @@ import static java.util.Optional.ofNullable;
 @AppService
 public class GroupService extends BaseService {
 
-    public List<SimpleGroupDto> getCurrentUserGroups() {
+    public Set<SimpleGroupDto> getCurrentUserGroups() {
         return ofNullable(groupRepository.findAllByMembersUserNamesOrAdminsUserNamesAndVisibleTrue(UserContext
                 .getUsername(), UserContext.getUsername()))
                 .map(groups -> groups.stream()
                         .map(SimpleGroupDto::valueOf)
-                        .collect(Collectors.toList()))
-                .orElse(Collections.emptyList());
+                        .collect(Collectors.toSet()))
+                .orElse(Collections.emptySet());
     }
 
     public SimpleGroupDto joinToGroupByCode(String code) {

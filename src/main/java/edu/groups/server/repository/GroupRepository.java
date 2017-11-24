@@ -6,15 +6,15 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.LockModeType;
-import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Dawid on 11.11.2017 at 19:56.
  */
 @Repository
 public interface GroupRepository extends CrudRepository<GroupEntity, Long> {
-    List<GroupEntity> findAllByMembersUserNamesOrAdminsUserNamesAndVisibleTrue(String memberUserName,
-                                                                               String adminUserName);
+    Set<GroupEntity> findAllByMembersUserNamesOrAdminsUserNamesAndVisibleTrue(String memberUserName,
+                                                                              String adminUserName);
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     GroupEntity findByJoinCodeAndVisibleIsTrue(String joinCode);

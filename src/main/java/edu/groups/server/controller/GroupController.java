@@ -3,7 +3,6 @@ package edu.groups.server.controller;
 import edu.groups.server.dto.CreatedGroupDto;
 import edu.groups.server.dto.GroupDto;
 import edu.groups.server.dto.SimpleGroupDto;
-import edu.groups.server.entity.GroupEntity;
 import edu.groups.server.service.GroupService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -29,7 +27,7 @@ public class GroupController {
     private final GroupService groupService;
 
     @GetMapping("/my")
-    public List<SimpleGroupDto> getCurrentUserSimpleGroup() {
+    public Set<SimpleGroupDto> getCurrentUserSimpleGroup() {
         return groupService.getCurrentUserGroups();
     }
 
