@@ -1,5 +1,6 @@
 package edu.groups.server.controller;
 
+import edu.groups.server.exception.CommentDisabledException;
 import edu.groups.server.exception.InvalidJoinCodeException;
 import edu.groups.server.exception.PermissionDeniedException;
 import edu.groups.server.exception.ResourceNotFoundException;
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  */
 @ControllerAdvice
 public class ExceptionHandlerController {
-    @ExceptionHandler({ResourceNotFoundException.class, InvalidJoinCodeException.class})
+    @ExceptionHandler({ResourceNotFoundException.class, InvalidJoinCodeException.class, CommentDisabledException.class})
     @ResponseStatus(value = HttpStatus.NOT_FOUND)
     @ResponseBody
     public String requestHandlingNoHandlerFound(Exception exception) {
@@ -27,4 +28,5 @@ public class ExceptionHandlerController {
     public String requestHandlingPermissionDenied(Exception exception) {
         return exception.getMessage();
     }
+
 }

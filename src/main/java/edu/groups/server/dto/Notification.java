@@ -1,6 +1,7 @@
 package edu.groups.server.dto;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 
 /**
@@ -8,7 +9,12 @@ import lombok.Data;
  */
 @AllArgsConstructor
 @Data
+@Builder
 public class Notification {
     private String title;
+    private NotificationType notificationType;
     private String content;
+    private Long groupId;
+    private Long postId;
+    private Long commentId;
 }

@@ -11,6 +11,7 @@ import edu.groups.server.utils.GroupCodeGenerator;
 import edu.groups.server.utils.UserContext;
 import lombok.RequiredArgsConstructor;
 
+import javax.transaction.Transactional;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -23,6 +24,7 @@ import static java.util.Optional.ofNullable;
  */
 @RequiredArgsConstructor
 @AppService
+@Transactional
 public class GroupService extends BaseService {
 
     public Set<SimpleGroupDto> getCurrentUserGroups() {

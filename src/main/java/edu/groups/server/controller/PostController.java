@@ -1,6 +1,8 @@
 package edu.groups.server.controller;
 
 import edu.groups.server.dto.AddEditPostDto;
+import edu.groups.server.entity.Post;
+import edu.groups.server.service.AndroidPushNotificationService;
 import edu.groups.server.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,11 +22,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class PostController {
     private final PostService postService;
+    private final AndroidPushNotificationService pushNotificationService;
 
     @PostMapping("/{groupId}/posts")
     @PreAuthorize("hasRole(T(edu.groups.server.configuration.security.UserRole).ADMIN.name)")
     public Long createNewPost(@PathVariable Long groupId, @RequestBody AddEditPostDto newPostDto) {
-        return postService.createPost(groupId, newPostDto);
+        Post post = postService.createPost(groupId, newPostDto);
+        pushNotificationService.send(groupId, post.toNotification());
+        return post.getId();
     }
 
     @PutMapping("/posts/{postId}")

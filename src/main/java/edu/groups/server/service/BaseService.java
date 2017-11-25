@@ -5,17 +5,14 @@ import edu.groups.server.exception.PermissionDeniedException;
 import edu.groups.server.exception.ResourceNotFoundException;
 import edu.groups.server.repository.GroupRepository;
 import edu.groups.server.utils.UserContext;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.Optional;
 
 import static java.util.Optional.ofNullable;
 
 /**
  * Created by Dawid on 17.11.2017 at 13:21.
  */
-public class BaseService {
+public abstract class BaseService {
     @Autowired
     protected GroupRepository groupRepository;
 

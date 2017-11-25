@@ -1,17 +1,17 @@
 package edu.groups.server.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import edu.groups.server.dto.AddEditPostDto;
-import javafx.geometry.Pos;
-import lombok.Builder;
+import edu.groups.server.dto.Notification;
+import edu.groups.server.dto.NotificationType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Version;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,8 +26,9 @@ public class Post extends Message {
     @Version
     private int version;
 
-    @ElementCollection
-    private List<Comment> comments;
+    @OneToMany(mappedBy = "post")
+    private List<Comment> comments = new ArrayList<>();
+
     private boolean commentEnabled = true;
 
     @ManyToOne
@@ -39,5 +40,15 @@ public class Post extends Message {
         this.title = title;
         this.commentEnabled = commentEnabled;
         this.groupEntity = groupEntity;
+    }
+
+    public Notification toNotification() {
+        return Notification.builder()
+                .title(getTitle())
+                .notificationType(NotificationType.POST)
+                .content(getContent())
+                .groupId(getGroupEntity().getId())
+                .postId(getId())
+                .build();
     }
 }
