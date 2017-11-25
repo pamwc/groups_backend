@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -25,7 +26,9 @@ public class AndroidPushNotificationService {
 
     private final Gson gson;
 
-    public void send(String topic, Notification notification) {
+    @Async
+    public void send(Long subscribeEntityId, Notification notification) {
+        String topic = subscribeEntityId.toString();
         HttpEntity<String> httpNotification = prepareRequestBody(wrapNotification(topic, notification));
 
         RestTemplate restTemplate = new RestTemplate();
