@@ -29,7 +29,7 @@ public abstract class BaseService {
         }
     }
 
-    private boolean isUserMemberOfGroup(GroupEntity groupEntity, String currentUserLogin) {
+    protected boolean isUserMemberOfGroup(GroupEntity groupEntity, String currentUserLogin) {
         return groupEntity.getAdminsUserNames().contains(currentUserLogin) ||
                 groupEntity.getMembersUserNames().contains(currentUserLogin);
     }

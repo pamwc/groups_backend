@@ -80,4 +80,9 @@ public class GroupController {
     public String getJoinCode(@PathVariable Long groupId) {
         return groupService.getJoinCode(groupId);
     }
+
+    @GetMapping("/{groupId}/isUserMember")
+    private boolean isUserMemberOfGroup(@PathVariable Long groupId) {
+        return groupService.isUserMemberOfGroup(groupId);
+    }
 }

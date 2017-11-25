@@ -117,4 +117,9 @@ public class GroupService extends BaseService {
         throwExceptionIfUserIsNotGroupAdmin(groupEntity);
         return groupEntity.getJoinCode();
     }
+
+    public boolean isUserMemberOfGroup(Long groupId) {
+        GroupEntity group = groupRepository.findByIdAndVisibleIsTrue(groupId);
+        return group != null && super.isUserMemberOfGroup(group, UserContext.getUsername());
+    }
 }
