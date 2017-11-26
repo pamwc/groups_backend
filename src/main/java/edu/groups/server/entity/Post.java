@@ -49,6 +49,7 @@ public class Post extends Message {
                 .content(getContent())
                 .groupId(getGroupEntity().getId())
                 .postId(getId())
+                .author(getAuthorUserName())
                 .build();
     }
 }

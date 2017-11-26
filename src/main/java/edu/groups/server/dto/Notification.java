@@ -13,6 +13,7 @@ import lombok.Data;
 public class Notification {
     private String title;
     private NotificationType notificationType;
+    private String author;
     private String content;
     private Long groupId;
     private Long postId;

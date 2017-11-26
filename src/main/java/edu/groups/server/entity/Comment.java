@@ -36,6 +36,7 @@ public class Comment extends Message {
                 .content(getContent())
                 .groupId(group.getId())
                 .postId(getPost().getId())
+                .author(getAuthorUserName())
                 .commentId(getId())
                 .build();
     }
