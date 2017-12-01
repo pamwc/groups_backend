@@ -1,8 +1,6 @@
 package edu.groups.server.controller;
 
-import edu.groups.server.dto.CreatedGroupDto;
-import edu.groups.server.dto.GroupDto;
-import edu.groups.server.dto.SimpleGroupDto;
+import edu.groups.server.dto.*;
 import edu.groups.server.service.GroupService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -32,14 +30,14 @@ public class GroupController {
     }
 
     @PostMapping("/join")
-    public SimpleGroupDto joinCurrentUserToGroup(@RequestBody String code) {
-        return groupService.joinToGroupByCode(code);
+    public SimpleGroupDto joinCurrentUserToGroup(@RequestBody JoinGroupRequestDto request) {
+        return groupService.joinToGroupByCode(request.getCode());
     }
 
     @PostMapping
     @PreAuthorize("hasRole(T(edu.groups.server.configuration.security.UserRole).ADMIN.name)")
-    public CreatedGroupDto create(@RequestBody String groupName) {
-        return groupService.createGroup(groupName);
+    public CreatedGroupDto create(@RequestBody CreateGroupRequestDto request) {
+        return groupService.createGroup(request.getGroupName());
     }
 
     @PostMapping("/{groupId}/leave")
