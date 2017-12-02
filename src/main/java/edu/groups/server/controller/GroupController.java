@@ -1,6 +1,10 @@
 package edu.groups.server.controller;
 
-import edu.groups.server.dto.*;
+import edu.groups.server.dto.CreateGroupRequestDto;
+import edu.groups.server.dto.CreatedGroupDto;
+import edu.groups.server.dto.GroupDto;
+import edu.groups.server.dto.JoinGroupRequestDto;
+import edu.groups.server.dto.SimpleGroupDto;
 import edu.groups.server.service.GroupService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -53,7 +57,7 @@ public class GroupController {
 
     @PostMapping("/{groupId}/resetJoinCode")
     @PreAuthorize("hasRole(T(edu.groups.server.configuration.security.UserRole).ADMIN.name)")
-    public String resetPassword(@PathVariable Long groupId) {
+    public String resetJoinCode(@PathVariable Long groupId) {
         return groupService.resetJoinCode(groupId);
     }
 
