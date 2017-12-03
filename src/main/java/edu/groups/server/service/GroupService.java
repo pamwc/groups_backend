@@ -2,7 +2,6 @@ package edu.groups.server.service;
 
 import edu.groups.server.annotation.AppService;
 import edu.groups.server.configuration.security.UserRole;
-import edu.groups.server.dto.CreatedGroupDto;
 import edu.groups.server.dto.GroupDto;
 import edu.groups.server.dto.SimpleGroupDto;
 import edu.groups.server.entity.GroupEntity;
@@ -54,11 +53,11 @@ public class GroupService extends BaseService {
         groupRepository.save(groupEntity);
     }
 
-    public CreatedGroupDto createGroup(String groupName) {
+    public SimpleGroupDto createGroup(String groupName) {
         GroupEntity groupEntity = new GroupEntity(groupName);
         groupEntity.getAdminsUserNames().add(UserContext.getUsername());
         groupRepository.save(groupEntity);
-        return new CreatedGroupDto(groupEntity.getId(), newJoinCode(groupEntity));
+        return SimpleGroupDto.valueOf(groupRepository.save(groupEntity));
     }
 
     public String resetJoinCode(Long groupId) {

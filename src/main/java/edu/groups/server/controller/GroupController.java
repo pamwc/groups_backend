@@ -1,7 +1,6 @@
 package edu.groups.server.controller;
 
 import edu.groups.server.dto.CreateGroupRequestDto;
-import edu.groups.server.dto.CreatedGroupDto;
 import edu.groups.server.dto.GroupDto;
 import edu.groups.server.dto.JoinGroupRequestDto;
 import edu.groups.server.dto.SimpleGroupDto;
@@ -40,7 +39,7 @@ public class GroupController {
 
     @PostMapping
     @PreAuthorize("hasRole(T(edu.groups.server.configuration.security.UserRole).ADMIN.name)")
-    public CreatedGroupDto create(@RequestBody CreateGroupRequestDto request) {
+    public SimpleGroupDto create(@RequestBody CreateGroupRequestDto request) {
         return groupService.createGroup(request.getGroupName());
     }
 
