@@ -1,6 +1,7 @@
 package edu.groups.server.dto;
 
 import com.google.gson.annotations.SerializedName;
+import edu.groups.server.entity.Notification;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

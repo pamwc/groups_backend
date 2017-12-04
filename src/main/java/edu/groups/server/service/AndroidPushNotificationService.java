@@ -1,8 +1,8 @@
 package edu.groups.server.service;
 
 import com.google.gson.Gson;
-import edu.groups.server.dto.Notification;
 import edu.groups.server.dto.NotificationWrapper;
+import edu.groups.server.entity.Notification;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,11 +23,12 @@ public class AndroidPushNotificationService {
     private String FIREBASE_SERVER_KEY;
     @Value("${firebase.notification.api.url}")
     private String FIREBASE_API_URL;
-
+    private final NotificationService notificationService;
     private final Gson gson;
 
     @Async
     public void send(Long subscribeEntityId, Notification notification) {
+        notificationService.saveNotification(notification);
         String topic = subscribeEntityId.toString();
         HttpEntity<String> httpNotification = prepareRequestBody(wrapNotification(topic, notification));
 

@@ -7,6 +7,8 @@ import edu.groups.server.repository.GroupRepository;
 import edu.groups.server.utils.UserContext;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.Optional;
+
 import static java.util.Optional.ofNullable;
 
 /**
@@ -36,5 +38,9 @@ public abstract class BaseService {
 
     protected GroupEntity getGroupOrThrow(Long groupId) {
         return ofNullable(groupRepository.findByIdAndVisibleIsTrue(groupId)).orElseThrow(ResourceNotFoundException::new);
+    }
+
+    protected Optional<GroupEntity> get(Long groupId) {
+        return ofNullable(groupRepository.findByIdAndVisibleIsTrue(groupId));
     }
 }

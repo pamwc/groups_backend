@@ -16,6 +16,8 @@ import static java.util.Optional.ofNullable;
 public abstract class MessageService extends BaseService {
     @Autowired
     protected PostRepository postRepository;
+    @Autowired
+    protected NotificationService notificationService;
 
     protected void throwExceptionIfUserIsNotAuthor(Message message) {
         String username = UserContext.getUsername();

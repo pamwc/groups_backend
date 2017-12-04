@@ -34,6 +34,7 @@ public class CommentService extends MessageService {
         throwExceptionIfUserIsNotAuthor(comment);
         comment.setVisible(false);
         commentRepository.save(comment);
+        notificationService.removeNotificationByCommentId(commentId);
     }
 
     public Comment createComment(Long postId, String commentContent) {

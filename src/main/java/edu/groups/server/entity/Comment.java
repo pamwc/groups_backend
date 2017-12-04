@@ -1,6 +1,5 @@
 package edu.groups.server.entity;
 
-import edu.groups.server.dto.Notification;
 import edu.groups.server.dto.NotificationType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

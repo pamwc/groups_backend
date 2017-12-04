@@ -44,5 +44,6 @@ public class PostService extends MessageService {
         throwExceptionIfUserIsNotAuthor(post);
         post.setVisible(false);
         postRepository.save(post);
+        notificationService.removeNotificationByPostId(postId);
     }
 }

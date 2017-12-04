@@ -1,5 +1,6 @@
 package edu.groups.server.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.GeneratedValue;
@@ -13,6 +14,8 @@ import java.io.Serializable;
 public abstract class BaseEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonIgnore
     protected Long id;
+    @JsonIgnore
     protected boolean visible = true;
 }

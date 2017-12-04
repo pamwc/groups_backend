@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static edu.groups.server.utils.UserContext.getUsername;
 import static java.util.Optional.ofNullable;
 
 /**
@@ -25,10 +26,11 @@ import static java.util.Optional.ofNullable;
 @AppService
 @Transactional
 public class GroupService extends BaseService {
+    private final NotificationService notificationService;
 
     public Set<SimpleGroupDto> getCurrentUserGroups() {
-        return ofNullable(groupRepository.findAllByMembersUserNamesOrAdminsUserNamesAndVisibleTrue(UserContext
-                .getUsername(), UserContext.getUsername()))
+        return ofNullable(groupRepository.findAllByMembersUserNamesOrAdminsUserNamesAndVisibleTrue(
+                getUsername(), getUsername()))
                 .map(groups -> groups.stream()
                         .map(SimpleGroupDto::valueOf)
                         .collect(Collectors.toSet()))
@@ -44,7 +46,7 @@ public class GroupService extends BaseService {
 
     private void joinToGroup(GroupEntity groupEntity) {
         List<String> currentUserAuthorities = UserContext.getAuthorities();
-        String username = UserContext.getUsername();
+        String username = getUsername();
         if (currentUserAuthorities.contains(UserRole.ADMIN.name)) {
             groupEntity.getAdminsUserNames().add(username);
         } else {
@@ -55,7 +57,7 @@ public class GroupService extends BaseService {
 
     public SimpleGroupDto createGroup(String groupName) {
         GroupEntity groupEntity = new GroupEntity(groupName);
-        groupEntity.getAdminsUserNames().add(UserContext.getUsername());
+        groupEntity.getAdminsUserNames().add(getUsername());
         groupRepository.save(groupEntity);
         return SimpleGroupDto.valueOf(groupRepository.save(groupEntity));
     }
@@ -73,14 +75,16 @@ public class GroupService extends BaseService {
     }
 
     public void removeCurrentUserFromGroup(Long groupId) {
-        removeUserFromGroup(Collections.singleton(UserContext.getUsername()),
+        removeUserFromGroup(Collections.singleton(getUsername()),
                 groupRepository.findByIdAndVisibleIsTrue(groupId));
+        notificationService.removeUsernameFromNotification(groupId, Collections.singleton(getUsername()));
     }
 
-    public void removeUserFromGroup(Long groupId, Set<String> userName) {
+    public void removeUserFromGroup(Long groupId, Set<String> userNames) {
         GroupEntity groupEntity = getGroupOrThrow(groupId);
         throwExceptionIfUserIsNotGroupAdmin(groupEntity);
-        removeUserFromGroup(userName, groupEntity);
+        removeUserFromGroup(userNames, groupEntity);
+        notificationService.removeUsernameFromNotification(groupId, userNames);
     }
 
     private void removeUserFromGroup(Set<String> userName, GroupEntity groupEntity) {
@@ -102,6 +106,7 @@ public class GroupService extends BaseService {
         throwExceptionIfUserIsNotGroupAdmin(groupEntity);
         groupEntity.setVisible(false);
         groupRepository.save(groupEntity);
+        notificationService.removeNotificationByGroupId(groupId);
     }
 
     public void modifyGroupName(Long groupId, String groupName) {
@@ -119,6 +124,6 @@ public class GroupService extends BaseService {
 
     public boolean isUserMemberOfGroup(Long groupId) {
         GroupEntity group = groupRepository.findByIdAndVisibleIsTrue(groupId);
-        return group != null && super.isUserMemberOfGroup(group, UserContext.getUsername());
+        return group != null && super.isUserMemberOfGroup(group, getUsername());
     }
 }
