@@ -1,6 +1,7 @@
 package edu.groups.server.service;
 
 import com.google.gson.Gson;
+import edu.groups.server.annotation.AppService;
 import edu.groups.server.dto.NotificationWrapper;
 import edu.groups.server.entity.Notification;
 import lombok.RequiredArgsConstructor;
@@ -9,13 +10,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 /**
  * Created by Dawid on 01.11.2017 at 00:51.
  */
-@Service
+@AppService
 @RequiredArgsConstructor
 @Slf4j
 public class AndroidPushNotificationService {

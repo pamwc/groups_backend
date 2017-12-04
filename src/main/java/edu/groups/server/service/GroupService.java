@@ -10,7 +10,6 @@ import edu.groups.server.utils.GroupCodeGenerator;
 import edu.groups.server.utils.UserContext;
 import lombok.RequiredArgsConstructor;
 
-import javax.transaction.Transactional;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -24,7 +23,6 @@ import static java.util.Optional.ofNullable;
  */
 @RequiredArgsConstructor
 @AppService
-@Transactional
 public class GroupService extends BaseService {
     private final NotificationService notificationService;
 
@@ -59,6 +57,7 @@ public class GroupService extends BaseService {
         GroupEntity groupEntity = new GroupEntity(groupName);
         groupEntity.getAdminsUserNames().add(getUsername());
         groupRepository.save(groupEntity);
+        newJoinCode(groupEntity);
         return SimpleGroupDto.valueOf(groupRepository.save(groupEntity));
     }
 

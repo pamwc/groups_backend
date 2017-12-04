@@ -7,15 +7,12 @@ import edu.groups.server.entity.Post;
 import edu.groups.server.utils.UserContext;
 import lombok.RequiredArgsConstructor;
 
-import javax.transaction.Transactional;
-
 /**
  * Created by Dawid on 17.11.2017 at 00:11.
  */
 
 @RequiredArgsConstructor
 @AppService
-@Transactional
 public class PostService extends MessageService {
 
     public Post createPost(Long groupId, AddEditPostDto newPost) {

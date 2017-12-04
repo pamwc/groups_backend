@@ -5,11 +5,13 @@ import edu.groups.server.dto.NotificationType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -20,6 +22,7 @@ import java.util.Set;
 @Data
 @Builder
 @Entity
+@NoArgsConstructor
 public class Notification extends BaseEntity {
     private String title;
     @Enumerated(EnumType.STRING)
@@ -32,4 +35,11 @@ public class Notification extends BaseEntity {
     @ElementCollection
     @JsonIgnore
     private Set<String> destinationUsername = new HashSet<>();
+
+    public void addUsers(Collection<String> userNames) {
+        if (destinationUsername == null) {
+            destinationUsername = new HashSet<>();
+            destinationUsername.addAll(userNames);
+        }
+    }
 }

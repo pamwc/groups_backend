@@ -1,12 +1,12 @@
 package edu.groups.server.service;
 
+import edu.groups.server.annotation.AppService;
 import edu.groups.server.entity.GroupEntity;
 import edu.groups.server.entity.Notification;
 import edu.groups.server.repository.GroupRepository;
 import edu.groups.server.repository.NotificationRepository;
 import edu.groups.server.utils.UserContext;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -19,7 +19,7 @@ import static org.springframework.util.CollectionUtils.isEmpty;
 /**
  * Created by Dawid on 04.12.2017 at 19:30.
  */
-@Service
+@AppService
 @RequiredArgsConstructor
 public class NotificationService {
     private final NotificationRepository repository;
@@ -33,7 +33,7 @@ public class NotificationService {
     private void saveNotification(Notification notification, GroupEntity groupEntity) {
         Set<String> userNames = Stream.concat(groupEntity.getAdminsUserNames().stream(), groupEntity.getMembersUserNames().stream())
                 .filter(username -> !username.equals(notification.getAuthor())).collect(Collectors.toSet());
-        notification.getDestinationUsername().addAll(userNames);
+        notification.addUsers(userNames);
         repository.save(notification);
     }
 
@@ -61,6 +61,7 @@ public class NotificationService {
 
         if (!isEmpty(notifications)) {
             Set<Notification> notifi = notifications.stream()
+                    .filter(n -> !n.getDestinationUsername().isEmpty())
                     .peek(notification -> notification.getDestinationUsername().removeAll(username))
                     .collect(Collectors.toSet());
             repository.save(notifi);

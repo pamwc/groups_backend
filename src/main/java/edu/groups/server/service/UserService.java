@@ -1,11 +1,11 @@
 package edu.groups.server.service;
 
+import edu.groups.server.annotation.AppService;
 import edu.groups.server.dto.AuthUser;
 import edu.groups.server.dto.UserDto;
 import edu.groups.server.repository.UserRepository;
 import edu.groups.server.utils.UserContext;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,7 +14,7 @@ import java.util.Set;
 /**
  * Created by Dawid on 05.11.2017 at 12:54.
  */
-@Service
+@AppService
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository repository;

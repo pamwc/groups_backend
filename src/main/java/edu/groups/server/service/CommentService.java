@@ -1,5 +1,6 @@
 package edu.groups.server.service;
 
+import edu.groups.server.annotation.AppService;
 import edu.groups.server.entity.Comment;
 import edu.groups.server.entity.Post;
 import edu.groups.server.exception.CommentDisabledException;
@@ -7,9 +8,6 @@ import edu.groups.server.exception.ResourceNotFoundException;
 import edu.groups.server.repository.CommentRepository;
 import edu.groups.server.utils.UserContext;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
-import javax.transaction.Transactional;
 
 import static java.util.Optional.ofNullable;
 
@@ -17,8 +15,7 @@ import static java.util.Optional.ofNullable;
  * Created by Dawid on 24.11.2017 at 19:21.
  */
 @RequiredArgsConstructor
-@Service
-@Transactional
+@AppService
 public class CommentService extends MessageService {
     private final CommentRepository commentRepository;
 
